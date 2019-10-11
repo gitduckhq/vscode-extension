@@ -1,0 +1,149 @@
+{
+	"name": "code-streaming",
+	"displayName": "GitDuck - Video code reviews and async pair programming",
+	"description": "Live coding stream for remote collaboration.",
+	"publisher": "gitduck",
+	"version": "0.0.29",
+	"engines": {
+		"vscode": "^1.33.0"
+	},
+	"categories": [
+		"Other"
+	],
+    "homepage": "https://gitduck.com",
+    "bugs": {
+      "url": "https://github.com/gitduckhq/vscode-extension/issues",
+      "email": "help@gitduck.com"
+    },
+	"keywords": [
+      "code review",
+      "video recording",
+      "live coding",
+      "youtube",
+      "twitch"
+    ],
+    "license": "GPL-3.0",
+	"icon": "out/assets/gitduck-extension-icon.png",
+	"activationEvents": [
+		"*"
+	],
+	"main": "./out/extension.js",
+	"contributes": {
+		"commands": [
+			{
+				"command": "gitduck.record",
+				"title": "GitDuck: Start Recording"
+			},
+			{
+				"command": "gitduck.stop",
+				"title": "GitDuck: Stop Recording"
+			},
+			{
+				"command": "gitduck.login",
+				"title": "GitDuck: Login"
+			},
+			{
+				"command": "gitduck.logout",
+				"title": "GitDuck: Logout"
+			},
+			{
+				"command": "gitduck.uploadSnippet",
+				"title": "GitDuck: Upload snippet"
+			},
+			{
+				"command": "gitduck.refreshInputDevices",
+				"title": "Refresh",
+				"icon": {
+					"light": "assets/refresh-light.svg",
+					"dark": "assets/refresh-dark.svg"
+				}
+			}
+		],
+		"configuration": {
+			"type": "object",
+			"title": "GitDuck configuration",
+			"properties": {
+				"gitduck.video-quality": {
+					"title": "Video Quality",
+					"type": "string",
+					"enum": [
+						"low",
+						"high"
+					],
+					"default": "low",
+					"description": "GitDuck video quality. Adjust depending on your network/performance."
+				}
+			}
+		},
+		"viewsContainers": {
+			"activitybar": [
+				{
+					"id": "gitduck",
+					"title": "GitDuck",
+					"icon": "assets/gitduck-extension-tree-icon.svg"
+				}
+			]
+		},
+		"views": {
+			"gitduck": [
+				{
+					"id": "inputSettings",
+					"name": "Input settings"
+				}
+			]
+		},
+		"menus": {
+			"view/title": [
+				{
+					"command": "gitduck.refreshInputDevices",
+					"when": "view == inputSettings",
+					"group": "navigation"
+				}
+			],
+			"editor/context": [
+				{
+					"command": "gitduck.uploadSnippet",
+					"when": "editorHasSelection"
+				}
+			]
+		}
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run webpack-prod",
+		"compile": "webpack --mode -development",
+		"watch": "webpack --mode development --watch",
+		"postinstall": "node ./node_modules/vscode/bin/install",
+		"test": "npm run compile && node ./node_modules/vscode/bin/test",
+		"webpack": "webpack --mode development",
+		"webpack-dev": "webpack --mode development --watch",
+		"webpack-prod": "webpack --mode production"
+	},
+	"devDependencies": {
+		"@types/mocha": "^2.2.42",
+		"@types/node": "^10.14.6",
+		"copy-webpack-plugin": "^5.0.4",
+		"ts-loader": "^6.1.2",
+		"tslint": "^5.12.1",
+		"typescript": "^3.3.1",
+		"vscode": "^1.1.33",
+		"webpack": "^4.41.0",
+		"webpack-cli": "^3.3.9"
+	},
+	"dependencies": {
+		"@types/request-promise-native": "^1.0.17",
+		"clipboardy": "^2.1.0",
+		"fluent-ffmpeg": "^2.1.2",
+		"lodash": "^4.17.15",
+		"parse-diff": "^0.6.0",
+		"request": "^2.88.0",
+		"request-promise-native": "^1.0.7",
+		"simple-git": "^1.126.0",
+		"systeminformation": "^4.14.8",
+		"tempy": "^0.3.0"
+	},
+	"repository": {
+		"private": false,
+		"type": "git",
+		"url": "https://github.com/gitduckhq/vscode-extension.git"
+	}
+}

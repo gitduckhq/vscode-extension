@@ -1,0 +1,6 @@
+out
+*.vsix
+.vscode-test
+node_modules
+.DS_Store
+.idea
