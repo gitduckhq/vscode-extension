@@ -15,9 +15,22 @@ class StatusBar {
     private item: vscode.StatusBarItem;
     timeout: NodeJS.Timer | null = null;
     counting = false;
+    userColorCustomizations: any;
+    gitDuckColorCustomizations: any;
 
     constructor() {
         this.item = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right);
+        this.userColorCustomizations = workbenchConfig.get('colorCustomizations');
+        const statusBarFGColor = '#802525';
+        const statusBarBGColor = '#F85246';
+        this.gitDuckColorCustomizations = {
+            'statusBar.background': statusBarBGColor,
+            'statusBar.foreground': statusBarFGColor,
+            'statusBar.debuggingForeground': statusBarFGColor,
+            'statusBar.debuggingBackground': statusBarBGColor,
+            'statusBar.noFolderForeground': statusBarFGColor,
+            'statusBar.noFolderBackground': statusBarBGColor,
+        };
     }
 
     show() {
@@ -40,7 +53,7 @@ class StatusBar {
     }
 
     stop() {
-        workbenchConfig.update('colorCustomizations', undefined, true);
+        workbenchConfig.update('colorCustomizations', this.userColorCustomizations, true);
         this.recordingStopped();
         this.item.command = 'gitduck.record';
         this.item.text = '$(triangle-right) Start GitDuck';
@@ -70,16 +83,9 @@ class StatusBar {
     }
 
     start() {
-        const statusBarFGColor = '#802525';
-        const statusBarBGColor = '#F85246';
-        workbenchConfig.update('colorCustomizations', {
-            'statusBar.background': statusBarBGColor,
-            'statusBar.foreground': statusBarFGColor,
-            'statusBar.debuggingForeground': statusBarFGColor,
-            'statusBar.debuggingBackground': statusBarBGColor,
-            'statusBar.noFolderForeground': statusBarFGColor,
-            'statusBar.noFolderBackground': statusBarBGColor,
-        }, true);
+        this.userColorCustomizations = workbenchConfig.get('colorCustomizations');
+        const colorCustomizations = {...this.userColorCustomizations, ...this.gitDuckColorCustomizations};
+        workbenchConfig.update('colorCustomizations', colorCustomizations, true);
         this.item.command = 'gitduck.stop';
         this.item.text = '$(primitive-square) GitDuck stream';
         this.item.color = '#000000';
