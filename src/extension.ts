@@ -2,7 +2,6 @@ import * as vscode from 'vscode';
 import recorder from './recorder';
 import status from './status';
 import {createCodingSession, completeSession, addCommits} from './api';
-import * as copyPaste from 'clipboardy';
 import config from './config';
 import {getStore, initStore} from './store';
 import {initCodeLinkingListener, getSessionCommits, cleanupCodeLinkingSession} from './code-linking';
@@ -56,7 +55,7 @@ export function activate(context: vscode.ExtensionContext) {
                     `Live coding session created: ${store.viewURL}`,
                     'Copy URL'
                 ).then(() => {
-                    copyPaste.writeSync(store.viewURL);
+                    vscode.env.clipboard.writeText(store.viewURL);
                 });
 
                 return status.start();
@@ -101,7 +100,7 @@ export function activate(context: vscode.ExtensionContext) {
                     `Uploading coding session to ${viewURL}`,
                     'Copy URL'
                 ).then(() => {
-                    copyPaste.writeSync(viewURL);
+                    vscode.env.clipboard.writeText(viewURL);
                 });
 
                 status.stop();
