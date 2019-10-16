@@ -1,7 +1,8 @@
 # GitDuck
 
-GitDuck allows you to record your code combined with your screen and microphone recording.
+GitDuck is an open source tool that allows you to record your code combined with your screen and microphone. You can record private or public coding sessions and easily share to anyone. Developers are using GitDuck to:
 
+* Record tutorials and walkthroughs
 * Video code reviews
 * Async pair programming
 * Live coding sessions
@@ -12,17 +13,17 @@ GitDuck allows you to record your code combined with your screen and microphone 
 
 ## ✨ What's new 
 
-**✂️ Code snippets**
-Besides making a commit, now there's a new way to link code to the video. Just select any code and right-click it and you see the option to to add to your video.
+**🌎 Open Source**
+The extension is now open source and you can review and contribute to its development.
 
-![Code snippets](https://storage.googleapis.com/gitduck/img/gitduck-snippets.gif)
+**✍️ Chat and comments**
+People can now add comments to your coding sessions and you can chat with anyone that visits your coding sessions. 
 
-**📌 Embed**
-Add your coding sessions to any webpage.
+**🛎 Mute notifications**
+Now we are enabling Do not disturb automatically once you start recording. This will prevent notifications to pop on your screen.
 
-**🔒 Private coding sessions**
-Record private coding sessions. Just go to your video and switch visibility to hidden.
-
+**🐛 Bugs fixed**
+We solved several bugs and improved performance. E.g. Custom theme being changed, Windows cropped recordings.
 
 
 ## Requirements
@@ -30,18 +31,15 @@ Record private coding sessions. Just go to your video and switch visibility to h
 GitDuck works for: 
 * MacOS 10.12 or greater.
 * Windows 7, 8 and 10.
-
-Linux support is coming soon.
+* Linux support is coming soon.
 
 
 
 ## Installation
 
-GitDuck is only available if you have an invitation. If you don't have one, start by reserving your username at at https://gitduck.com
-
-1. Create a GitDuck account with your invitation link.
+1. Create a GitDuck account.
 2. Connect your VS Code to your GitDuck account.
-3. That's it!
+3. That's it! Record your first coding session.
 
 
 
@@ -57,10 +55,11 @@ Click on `Start GitDuck` to generate an unique URL and start recording your scre
 
 * You can select the video input if you have multiple screens.
 * You can select the audio input if you have multiple microphones.
+* You can select the streaming quality: Low (default) or High quality.
 
 
 
-## How to watch
+## How to watch or share
 
 All you need to do is go to the URL generated or to your profile. Your coding sessions are going to be stored there.
 There you can also change the title, add a description or delete the video if you want.
