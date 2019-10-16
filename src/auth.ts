@@ -2,7 +2,6 @@ import * as vscode from 'vscode';
 import {getStore} from './store';
 import config from './config';
 import status from './status';
-import * as copyPaste from "clipboardy";
 
 export const authenticationCallback = (token: string, installationId: string) => {
     const store = getStore();
@@ -24,7 +23,7 @@ export const login = () => {
         `Please open this url in your browser so the extension can connect to your GitDuck account: ${URL}`,
         'Copy URL'
     ).then(() => {
-        copyPaste.writeSync(URL);
+        vscode.env.clipboard.writeText(URL);
     });
     vscode.env.openExternal(vscode.Uri.parse(URL));
 };
