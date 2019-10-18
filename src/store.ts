@@ -1,5 +1,7 @@
 import * as vscode from 'vscode';
 import * as crypto from 'crypto'
+import {pingHealthCheck} from './api';
+import Timeout = NodeJS.Timeout;
 
 let context: vscode.ExtensionContext;
 let store: Store;
@@ -20,6 +22,7 @@ class Store {
     private currentUser: object | undefined;
     private authToken: string | undefined;
     private snippets: object[] = [];
+    private healthCheckSessionInterval: Timeout;
 
     public codingSession = null;
     public readStream = null;
@@ -68,6 +71,12 @@ class Store {
     setRecordingCodingSession(codingSession: any) {
         this.codingSession = codingSession;
         this.startTrackingTimestamp = new Date();
+        if (codingSession.healthCheckURL) {
+            this.healthCheckSessionInterval = setInterval(() => {
+                pingHealthCheck(codingSession.healthCheckURL)
+                    .catch((e) => console.error('Error pinging health check', codingSession, e))
+            }, 6000);
+        }
     }
 
     addSnippet(snippet: object) {
@@ -79,6 +88,7 @@ class Store {
     }
 
     cleanupCodingSession() {
+        clearInterval(this.healthCheckSessionInterval);
         this.codingSession = null;
         this.readStream = null;
         this.uploadPromise = null;

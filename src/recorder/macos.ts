@@ -78,13 +78,15 @@ class MacOSRecorder implements IRecorder {
 
         const lowQuality = vscode.workspace.getConfiguration().get('gitduck.video-quality') === 'low';
 
+        const rtmpURL = `rtmp://${config.liveHost}/app/${options.streamKey}?useHealthCheck=true`;
+
         let args = [
             '-hide_banner -loglevel info -f avfoundation',
             `-capture_cursor 1 -i "${this.selectedVideoDeviceIndex}" -f avfoundation`,
             `-ac 2 -i ":${this.selectedAudioDeviceIndex}" -c:a aac -c:v libx264 -preset ultrafast -threads 0`,
             '-vf "scale=-2:1080,format=yuv420p" -tune zerolatency',
             '-framerate 20 -g 40 -f flv -pix_fmt yuv420p -b:a 128k -r 20',
-            `rtmp://${config.liveHost}/app/${options.streamKey}`
+            rtmpURL,
         ].join(' ');
 
         if (lowQuality) {
@@ -95,7 +97,7 @@ class MacOSRecorder implements IRecorder {
                 '-vf "scale=-2:720,format=yuv420p" -tune zerolatency -framerate 30',
                 '-g 60 -b:a 128k -pix_fmt yuv420p -crf 30 -b:v 600k',
                 `-r 15 -f flv`,
-                `rtmp://${config.liveHost}/app/${options.streamKey}`
+                rtmpURL,
             ].join(' ')
         }
 

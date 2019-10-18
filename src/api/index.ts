@@ -4,6 +4,7 @@ import {Commit} from '../types'
 import {getStore} from '../store';
 const {version} = require('../../package.json');
 import * as os from 'os';
+import * as vscode from 'vscode';
 
 const {apiHost} = config;
 
@@ -12,6 +13,7 @@ const getURI = (path: string) => apiHost + path;
 const getCommonHeaders = (): object => ({
     'X-GD-Extension-Version': version,
     'X-GD-OS': `${os.platform()} ${os.release()}`,
+    'X-GD-IDE': vscode.env.appName,
 });
 
 async function get({path, qs = {}, getFullResponse = false}: { path: string, qs?: object, getFullResponse?: boolean }): Promise<object> {
@@ -65,9 +67,22 @@ async function addCommits({id, commits = [], snippets = []}: { id: string, commi
     })
 }
 
+async function pingHealthCheck(url) {
+    const authToken = getStore().getAuthToken();
+    const headers = {...getCommonHeaders(), Authorization: authToken};
+
+    return request({
+        method: 'GET',
+        uri: url,
+        json: true,
+        headers,
+    });
+}
+
 
 export {
     createCodingSession,
     completeSession,
     addCommits,
+    pingHealthCheck,
 }
