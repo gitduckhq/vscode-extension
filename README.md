@@ -22,9 +22,6 @@ People can now add comments to your coding sessions and you can chat with anyone
 **🐛 Bugs fixed**
 We solved several bugs and improved performance. E.g. Custom theme being changed, Windows cropped recordings.
 
-**🛎 Mute notifications (Mac only)**
-Now we are enabling Do not disturb mode automatically once you start recording. This will prevent notifications to pop on your screen.
-
 
 ## Requirements
 

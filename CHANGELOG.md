@@ -1,5 +1,12 @@
 # GitDuck Change Log
 
+## [Version 0.0.30]
+
+- Fix: extension was removing custom color scheme. [#2](https://github.com/gitduckhq/vscode-extension/issues/2)
+- Fix: bug with `Copy to clipboard` button. [#3](https://github.com/gitduckhq/vscode-extension/issues/4)
+- Reliability improvement: send healthecks to the live server while recording. Stream will be stopped if no healthchecks are not received within a certain interval.
+- Fix: Windows bug, video was cropped if user had a different dispaly scale than 100%. [#6](https://github.com/gitduckhq/vscode-extension/issues/6) 
+
 ## [Version 0.0.29]
 
 - Change emojis for selecting screen/microphone.
