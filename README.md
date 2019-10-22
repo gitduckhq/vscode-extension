@@ -1,11 +1,11 @@
 # GitDuck
 
-GitDuck is an open source tool that allows you to record your code combined with your screen and microphone. You can record private or public coding sessions and easily share to anyone. Developers are using GitDuck to:
+GitDuck is an open source code and screen recording tool for programmers. It allows you to link your code to the timestamps of a screen recording video. You can record private or public coding sessions and easily share to anyone. Developers are using GitDuck to:
 
 * Record tutorials and walkthroughs
-* Video code reviews
-* Async pair programming
 * Live coding sessions
+* Async pair programming
+
 
 ![GitDuck coding session](https://storage.googleapis.com/gitduck/img/gitduck-preview-watch.gif)
 
@@ -13,17 +13,17 @@ GitDuck is an open source tool that allows you to record your code combined with
 
 ## ✨ What's new 
 
-**🌎 Open Source**
+**🌎 Open-source**
 The extension is now open source and you can review and contribute to its development.
 
 **✍️ Chat and comments**
 People can now add comments to your coding sessions and you can chat with anyone that visits your coding sessions. 
 
-**🛎 Mute notifications**
-Now we are enabling Do not disturb automatically once you start recording. This will prevent notifications to pop on your screen.
-
 **🐛 Bugs fixed**
 We solved several bugs and improved performance. E.g. Custom theme being changed, Windows cropped recordings.
+
+**🛎 Mute notifications (Mac only)**
+Now we are enabling Do not disturb mode automatically once you start recording. This will prevent notifications to pop on your screen.
 
 
 ## Requirements
