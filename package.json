@@ -3,7 +3,7 @@
 	"displayName": "GitDuck - Video code reviews and async pair programming",
 	"description": "Live coding stream for remote collaboration.",
 	"publisher": "gitduck",
-	"version": "0.0.29",
+	"version": "0.0.30",
 	"engines": {
 		"vscode": "^1.33.0"
 	},
