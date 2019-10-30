@@ -1,10 +1,12 @@
 # GitDuck
 
-GitDuck is an open source code and screen recording tool for programmers. It allows you to link your code to the timestamps of a screen recording video. You can record private or public coding sessions and easily share to anyone. Developers are using GitDuck to:
+GitDuck is an open source code and screen recording tool for programmers. It allows you to link your code to the timestamps of a screen recording video. You can record private or public coding sessions and easily share to your team. Developers are using GitDuck to:
 
+* Rubber Duck Debugging
+* Pair Programming
 * Record tutorials and walkthroughs
-* Live coding sessions
-* Async pair programming
+* Live coding
+* Collaborative coding
 
 
 ![GitDuck coding session](https://storage.googleapis.com/gitduck/img/gitduck-preview-watch.gif)
