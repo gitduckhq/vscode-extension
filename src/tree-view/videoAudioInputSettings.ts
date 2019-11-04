@@ -21,7 +21,7 @@ export class VideoAudioInputSettingsTreeProvider implements vscode.TreeDataProvi
     constructor(recorder: IRecorder, selectedVideoDeviceIndex = 1, selectedAudioDeviceIndex = 0) {
         this.recorder = recorder;
         this.selectedVideoDeviceIndex = selectedVideoDeviceIndex;
-        this.selectedAudioDeviceIndex = selectedVideoDeviceIndex;
+        this.selectedAudioDeviceIndex = selectedAudioDeviceIndex;
         this.refresh();
     }
 
