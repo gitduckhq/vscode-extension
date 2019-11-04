@@ -30,7 +30,7 @@ export const login = () => {
 
 export const logout = () => {
     const store = getStore();
-    store.clearAuthToken();
+    store.logout();
     vscode.window.showInformationMessage('Logged out');
     status.login();
 };

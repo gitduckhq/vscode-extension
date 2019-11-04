@@ -41,7 +41,8 @@ export function activate(context: vscode.ExtensionContext) {
             store.isRecording = true;
             status.loading();
             try {
-                store.setRecordingCodingSession(await createCodingSession());
+                const newCodingSession = await createCodingSession(store.getSelectedOrganizationId());
+                store.setRecordingCodingSession(newCodingSession);
                 await initCodeLinkingListener();
 
                 console.log('Coding session', store.codingSession);

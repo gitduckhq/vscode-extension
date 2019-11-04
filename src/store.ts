@@ -15,6 +15,8 @@ const stateKeys = {
     AUTH_TOKEN: 'authToken',
     INSTALLATION_ID: 'installationId',
     CURRENT_USER: 'currentUser',
+    MY_ORGANIZATIONS: 'myOrganizations',
+    SELECTED_ORGANIZATION_ID: 'selectedOrganizationId',
 };
 
 class Store {
@@ -23,6 +25,8 @@ class Store {
     private authToken: string | undefined;
     private snippets: object[] = [];
     private healthCheckSessionInterval: Timeout;
+    private myOrganizations;
+    private selectedOrganizationId;
 
     public codingSession = null;
     public readStream = null;
@@ -46,6 +50,8 @@ class Store {
         this.installationId = installationId.toString();
         this.authToken = globalState.get(stateKeys.AUTH_TOKEN);
         this.currentUser = globalState.get(stateKeys.CURRENT_USER);
+        this.myOrganizations = globalState.get(stateKeys.MY_ORGANIZATIONS);
+        this.selectedOrganizationId = globalState.get(stateKeys.SELECTED_ORGANIZATION_ID);
     }
 
     setAuthToken(token: string) {
@@ -54,12 +60,38 @@ class Store {
         this.authToken = token;
     }
 
+    getMyOrganizations() {
+        return this.myOrganizations;
+    }
+
+    setMyOrganizations(organizations) {
+        const {globalState} = this.context;
+        globalState.update(stateKeys.MY_ORGANIZATIONS, organizations);
+        this.myOrganizations = organizations;
+    }
+
+    setSelectedOrganizationId(organizationId) {
+        const {globalState} = this.context;
+        globalState.update(stateKeys.SELECTED_ORGANIZATION_ID, organizationId);
+        this.selectedOrganizationId = organizationId;
+    }
+
+    getSelectedOrganizationId() {
+        return this.selectedOrganizationId;
+    }
+
     getAuthToken() {
         return this.authToken;
     }
 
     isAuthenticated() {
         return !!this.authToken;
+    }
+
+    logout() {
+        this.clearAuthToken();
+        this.setMyOrganizations(null);
+        this.setSelectedOrganizationId(null);
     }
 
     clearAuthToken() {

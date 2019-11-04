@@ -16,6 +16,18 @@ const getCommonHeaders = (): object => ({
     'X-GD-IDE': vscode.env.appName,
 });
 
+async function pingHealthCheck(url) {
+    const authToken = getStore().getAuthToken();
+    const headers = {...getCommonHeaders(), Authorization: authToken};
+
+    return request({
+        method: 'GET',
+        uri: url,
+        json: true,
+        headers,
+    });
+}
+
 async function get({path, qs = {}, getFullResponse = false}: { path: string, qs?: object, getFullResponse?: boolean }): Promise<object> {
     const authToken = getStore().getAuthToken();
     const headers = {...getCommonHeaders(), ...(authToken ? {Authorization: authToken}: {})};
@@ -45,9 +57,12 @@ async function post({path, body, getFullResponse = false}: { path: string, body?
     });
 }
 
-async function createCodingSession() {
+async function createCodingSession(organizationId) {
     return post({
-        path: '/coding-sessions'
+        path: '/coding-sessions',
+        body: {
+            organizationId,
+        }
     })
 }
 
@@ -67,16 +82,10 @@ async function addCommits({id, commits = [], snippets = []}: { id: string, commi
     })
 }
 
-async function pingHealthCheck(url) {
-    const authToken = getStore().getAuthToken();
-    const headers = {...getCommonHeaders(), Authorization: authToken};
-
-    return request({
-        method: 'GET',
-        uri: url,
-        json: true,
-        headers,
-    });
+async function fetchMyOrganizations() {
+    return get({
+        path: `/me/organizations`,
+    })
 }
 
 
@@ -85,4 +94,5 @@ export {
     completeSession,
     addCommits,
     pingHealthCheck,
+    fetchMyOrganizations,
 }

@@ -89,6 +89,10 @@
 				{
 					"id": "inputSettings",
 					"name": "Input settings"
+				},
+				{
+					"id": "teamSelector",
+					"name": "Team selector"
 				}
 			]
 		},
