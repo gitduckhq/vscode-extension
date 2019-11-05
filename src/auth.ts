@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import {getStore} from './store';
 import config from './config';
 import status from './status';
+import {fetchMyOrganizations} from './api';
 
 export const authenticationCallback = (token: string, installationId: string) => {
     const store = getStore();
@@ -13,6 +14,9 @@ export const authenticationCallback = (token: string, installationId: string) =>
     store.setAuthToken(token);
     status.stop();
     vscode.window.showInformationMessage('Successfully authenticated');
+    fetchMyOrganizations().then(organizations => {
+        store.setMyOrganizations(organizations);
+    })
 };
 
 export const login = () => {

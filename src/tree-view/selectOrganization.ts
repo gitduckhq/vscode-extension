@@ -14,7 +14,11 @@ export class SelectOrganizationTreeProvider implements vscode.TreeDataProvider<O
     }
 
     setOrganizations(organizations) {
-        this.organizations = organizations;
+        this.organizations = organizations || [];
+        const selectedOrgExists = this.organizations.some(organization => organization.id === this.selectedOrganizationId);
+        if (!selectedOrgExists) {
+            this.setOrganizationId(null)
+        }
         this.refresh();
     }
 

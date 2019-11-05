@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import * as crypto from 'crypto'
 import {pingHealthCheck} from './api';
+import * as EventEmitter from 'events';
 import Timeout = NodeJS.Timeout;
 
 let context: vscode.ExtensionContext;
@@ -27,6 +28,7 @@ class Store {
     private healthCheckSessionInterval: Timeout;
     private myOrganizations;
     private selectedOrganizationId;
+    private eventEmitter: EventEmitter;
 
     public codingSession = null;
     public readStream = null;
@@ -34,9 +36,13 @@ class Store {
     public isRecording = false;
     public viewURL: string | undefined;
     public startTrackingTimestamp: Date;
+    public events = {
+        ORGANIZATIONS_CHANGED: 'ORGANIZATIONS_CHANGED'
+    };
 
     constructor(private context: vscode.ExtensionContext) {
         this.loadInitialState();
+        this.eventEmitter = new EventEmitter();
     }
 
     loadInitialState() {
@@ -54,6 +60,10 @@ class Store {
         this.selectedOrganizationId = globalState.get(stateKeys.SELECTED_ORGANIZATION_ID);
     }
 
+    onOrganizationsChanged(callback) {
+        this.eventEmitter.on(this.events.ORGANIZATIONS_CHANGED, callback)
+    }
+
     setAuthToken(token: string) {
         const {globalState} = this.context;
         globalState.update(stateKeys.AUTH_TOKEN, token);
@@ -68,6 +78,7 @@ class Store {
         const {globalState} = this.context;
         globalState.update(stateKeys.MY_ORGANIZATIONS, organizations);
         this.myOrganizations = organizations;
+        this.eventEmitter.emit(this.events.ORGANIZATIONS_CHANGED, organizations)
     }
 
     setSelectedOrganizationId(organizationId) {
