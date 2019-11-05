@@ -52,7 +52,15 @@
 			},
 			{
 				"command": "gitduck.refreshInputDevices",
-				"title": "Refresh",
+				"title": "Refresh devices",
+				"icon": {
+					"light": "assets/refresh-light.svg",
+					"dark": "assets/refresh-dark.svg"
+				}
+			},
+			{
+				"command": "gitduck.refreshOrganizations",
+				"title": "Refresh organizations",
 				"icon": {
 					"light": "assets/refresh-light.svg",
 					"dark": "assets/refresh-dark.svg"
@@ -101,6 +109,11 @@
 				{
 					"command": "gitduck.refreshInputDevices",
 					"when": "view == inputSettings",
+					"group": "navigation"
+				},
+				{
+					"command": "gitduck.refreshOrganizations",
+					"when": "view == teamSelector",
 					"group": "navigation"
 				}
 			],

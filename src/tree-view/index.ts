@@ -42,6 +42,10 @@ function createTeamSelectorProvider() {
             getStore().setSelectedOrganizationId(organizationId);
         }
     );
+    vscode.commands.registerCommand(
+        'gitduck.refreshOrganizations',
+        () => fetchMyOrganizations().then(organizations => getStore().setMyOrganizations(organizations))
+    );
 
     const store = getStore();
     const organizations = store.getMyOrganizations();
@@ -49,12 +53,10 @@ function createTeamSelectorProvider() {
 
     const teamSelectorProvider = new SelectOrganizationTreeProvider(organizations || [], selectedOrgId);
 
+    store.onOrganizationsChanged((organizations) => teamSelectorProvider.setOrganizations(organizations));
+
     if (!organizations) {
-        fetchMyOrganizations()
-            .then(organizations => {
-                teamSelectorProvider.setOrganizations(organizations);
-                store.setMyOrganizations(organizations);
-            })
+        fetchMyOrganizations().then(organizations => store.setMyOrganizations(organizations))
     }
 
     return teamSelectorProvider
