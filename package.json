@@ -1,7 +1,7 @@
 {
 	"name": "code-streaming",
-	"displayName": "GitDuck - Rubber Duck Debugging and remote pair programming",
-	"description": "Live coding stream for remote teams.",
+	"displayName": "GitDuck - Live coding for remote teams",
+	"description": "Remote Pair Programming and Rubber Duck Debugging tool.",
 	"publisher": "gitduck",
 	"version": "0.0.30",
 	"engines": {
