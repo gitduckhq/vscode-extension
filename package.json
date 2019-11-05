@@ -88,11 +88,11 @@
 			"gitduck": [
 				{
 					"id": "inputSettings",
-					"name": "Input settings"
+					"name": "Select screen and mic"
 				},
 				{
 					"id": "teamSelector",
-					"name": "Team selector"
+					"name": "Select team"
 				}
 			]
 		},

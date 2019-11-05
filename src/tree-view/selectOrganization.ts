@@ -39,7 +39,7 @@ export class SelectOrganizationTreeProvider implements vscode.TreeDataProvider<O
         const isValidOrganizationId = !!this.selectedOrganizationId || this.organizations.some(organization => organization.id === this.selectedOrganizationId)
 
         return [
-            new OrganizationItem('None', null, !isValidOrganizationId),
+            new OrganizationItem('None (publicly)', null, !isValidOrganizationId),
             ...this.organizations.map(org => new OrganizationItem(org.username, org.id, this.selectedOrganizationId === org.id))
         ]
     }
