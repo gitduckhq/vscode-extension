@@ -3,7 +3,7 @@
 GitDuck is an open source collaboration tool for remote development teams. It allows developers to link their code to the video timestamps and create interactive coding videos. Record private or public coding sessions and easily share how you code with your team.
 
 * ☑️ Pair Programming
-* ☑️ Rubber Duck Debbugging
+* ☑️ Rubber Duck Debugging
 * ☑️ Live Coding
 * ☑️ Stream privately and publicly
 * ☑️ Record tutorials and walkthroughs
