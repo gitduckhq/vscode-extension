@@ -1,5 +1,10 @@
 # GitDuck Change Log
 
+## [Version 0.0.31]
+
+- Add: team selector, to record videos for a GitDuck team. [GitDuck video](https://gitduck.com/watch/5dc00122d10ecc2f59d2ac09)
+- Fix: small audio bug in some scenarios
+
 ## [Version 0.0.30]
 
 - Fix: extension was removing custom color scheme. [#2](https://github.com/gitduckhq/vscode-extension/issues/2)
