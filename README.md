@@ -35,6 +35,9 @@ GitDuck works for:
 3. That's it! Record your first coding session.
 
 
+## How to connect your VS Code to GitDuck
+
+![GitDuck coding session](https://storage.googleapis.com/gitduck/img/how-to-connect-extension-new.gif)
 
 ## How to record
 
