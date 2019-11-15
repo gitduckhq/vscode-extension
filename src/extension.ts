@@ -22,7 +22,20 @@ export function activate(context: vscode.ExtensionContext) {
         status.show();
         initTreeView(recorder);
 
-        async function onError() {
+        async function onError(retry = 0) {
+            const maxRetires = 3;
+            const store = getStore();
+            const atLeastStartedMilisAgo = 30 * 1000;
+            const shouldRetryReconnection = retry < maxRetires && ((Date.now() - new Date(store.startTrackingTimestamp).getTime()) > atLeastStartedMilisAgo);
+            if (shouldRetryReconnection) {
+                vscode.window.showInformationMessage('Something went wrong. Reconnecting in 3 seconds...');
+                return setTimeout(() => {
+                    recorder.start({
+                        streamKey: store.codingSession.streamKey,
+                        onError: () => onError(retry + 1)
+                    })
+                }, 3000);
+            }
             await gdStop().catch(console.error);
 
             if (recorder) {
