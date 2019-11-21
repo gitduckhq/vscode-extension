@@ -1,5 +1,9 @@
 # GitDuck Change Log
 
+## [Version 0.0.32]
+
+- Add reconnection attempts to server if something goes wrong with the server.
+
 ## [Version 0.0.31]
 
 - Add: team selector, to record videos for a GitDuck team. [GitDuck video](https://gitduck.com/watch/5dc00122d10ecc2f59d2ac09)

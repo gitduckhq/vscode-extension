@@ -3,7 +3,7 @@
 	"displayName": "GitDuck - Live coding for remote teams",
 	"description": "Remote Pair Programming and Rubber Duck Debugging tool.",
 	"publisher": "gitduck",
-	"version": "0.0.31",
+	"version": "0.0.32",
 	"engines": {
 		"vscode": "^1.33.0"
 	},
