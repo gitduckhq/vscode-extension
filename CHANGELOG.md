@@ -1,5 +1,9 @@
 # GitDuck Change Log
 
+## [Version 0.0.33]
+
+- Improve FFmpeg process termination. ([5d36cf0](https://github.com/gitduckhq/vscode-extension/commit/5d36cf0a03fca5030c8a1469d910aff6490e4e00))
+
 ## [Version 0.0.32]
 
 - Add reconnection attempts to server if something goes wrong with the server.
