@@ -25,6 +25,8 @@ class MacOSRecorder implements IRecorder {
     private selectedVideoDeviceIndex = 1;
     private selectedAudioDeviceIndex = 0;
 
+    private onError;
+
     constructor(options?: RecorderOptions) {
         if (options) {
             this.options = options;
@@ -74,6 +76,7 @@ class MacOSRecorder implements IRecorder {
     }
 
     async start(options: RecorderOptions) {
+        this.onError = options.onError;
         const destinationPath = tempy.file({extension: 'mkv'});
 
         const lowQuality = vscode.workspace.getConfiguration().get('gitduck.video-quality') === 'low';
@@ -160,7 +163,17 @@ class MacOSRecorder implements IRecorder {
 
     async stop() {
         this.recording = false;
-        return this.ffmpegChild.kill();
+        this.ffmpegChild.kill();
+
+        // sometimes FFmpeg gets stuck and needs 3 kill signals to terminate its process
+        let retries = 0, maxRetries = 5;
+        // when process doesn't exist anymore kill() func returns false so we can exit loop
+        while (this.ffmpegChild.kill() && retries < maxRetries) {
+            retries++;
+        }
+        if (retries === maxRetries && this.onError) {
+            this.onError()
+        }
     }
 }
 

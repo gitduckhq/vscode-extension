@@ -26,6 +26,8 @@ class WindowsRecorder implements IRecorder {
     private selectedVideoDevice: InputScreenDevice | undefined;
     private selectedAudioDevice: InputDevice | undefined;
 
+    private onError;
+
     constructor(options?: RecorderOptions) {
         if (options) {
             this.options = options;
@@ -100,6 +102,7 @@ class WindowsRecorder implements IRecorder {
     }
 
     async start(options: RecorderOptions) {
+        this.onError = options.onError;
         const lowQuality = vscode.workspace.getConfiguration().get('gitduck.video-quality') === 'low';
 
         if (!this.selectedVideoDevice) {
@@ -196,7 +199,22 @@ class WindowsRecorder implements IRecorder {
 
     async stop() {
         this.recording = false;
-        await exec('taskkill ' + ['/pid', this.ffmpegChild.pid, '/f', '/t'].join(' '));
+        // Windows doesn't support KILL signals like POSIX, let's try running taskkill.exe on FFmpeg PID
+        await exec('taskkill ' + ['/pid', this.ffmpegChild.pid, '/f', '/t'].join(' '))
+            .catch(console.error);
+
+        // ChildProcess.kill() in Windows Node.js tries to terminate the process
+        this.ffmpegChild.kill();
+
+        // sometimes FFmpeg gets stuck and needs 3 kill signals to terminate its process
+        let retries = 0, maxRetries = 5;
+        // when process doesn't exist anymore kill() func returns false so we can exit loop
+        while (this.ffmpegChild.kill() && retries < maxRetries) {
+            retries++;
+        }
+        if (retries === maxRetries && this.onError) {
+            this.onError()
+        }
     }
 }
 
