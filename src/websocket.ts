@@ -2,6 +2,11 @@ import * as WebSocket from 'ws'
 import config from './config'
 import {getStore} from './store'
 
+
+/*
+TODO: Handle reconnection
+*/
+
 let wsConnection;
 
 enum WsReadyStatus {
@@ -26,6 +31,19 @@ export function init() {
 async function onUserLoggedIn() {
     const authToken = getStore().getAuthToken();
     await authenticate(authToken);
+
+    await send({type: 'subscribe_created_or_stopped_sessions'});
+    const ws = await getConnection();
+
+    ws.on('message', msg => {
+        const {type, codingSessionId, createdDateTime} = JSON.parse(msg);
+
+        if (type === 'coding_session_created') {
+            getStore().emitStartedCodingSession(codingSessionId, createdDateTime)
+        } else if (type === 'coding_session_ended') {
+            getStore().emitEndedCodingSession(codingSessionId)
+        }
+    })
 }
 
 async function onUserLoggedOut() {

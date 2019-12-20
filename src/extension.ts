@@ -22,7 +22,69 @@ export function activate(context: vscode.ExtensionContext) {
         }
         status.show();
         initTreeView(recorder);
+        store.onCodingSessionStarted(onCodingSessionStart);
+        store.onCodingSessionEnded(onCodingSessionEnd);
         initWebSocket();
+
+        async function onCodingSessionStart(codingSessionId, createdDateTime) {
+            store.isRecording = true;
+            status.loading();
+            try {
+                // store.setRecordingCodingSession(newCodingSession);
+                await initCodeLinkingListener();
+                store.startTrackingTimestamp = createdDateTime ? new Date(createdDateTime) : new Date();
+
+                store.viewURL = `${config.websiteHost}/watch/${codingSessionId}`;
+                vscode.window.showInformationMessage(
+                    `Watching commits for ${store.viewURL}`,
+                    'Copy URL'
+                ).then(() => {
+                    vscode.env.clipboard.writeText(store.viewURL);
+                });
+
+                status.start();
+            } catch (error) {
+                vscode.window.showErrorMessage('Something went wrong. If you need help please write to help@gitduck.com.');
+                console.error(error);
+                store.isRecording = false;
+                return status.stop();
+            }
+        }
+
+        async function onCodingSessionEnd(codingSessionId) {
+            try {
+                status.uploading();
+
+                const commits = getSessionCommits();
+                console.log('commmits', commits);
+                const snippets = store.getSnippets();
+                console.log('snippets', snippets);
+                if (commits.length > 0 || snippets.length > 0) {
+                    await addCommits({id: codingSessionId, commits, snippets})
+                        .catch(error => {
+                            console.error(error);
+                            vscode.window.showErrorMessage('Error uploading your commits');
+                        })
+                }
+
+                const {viewURL} = store;
+
+                cleanupCodeLinkingSession();
+                store.cleanupCodingSession();
+
+                vscode.window.showInformationMessage(
+                    `Uploading commits to ${viewURL}`,
+                    'Copy URL'
+                ).then(() => {
+                    vscode.env.clipboard.writeText(viewURL);
+                });
+            } catch (error) {
+                vscode.window.showErrorMessage('Something went wrong while uploading your code. You can contact us at help@gitduck.com');
+                console.error(error);
+            }
+            store.isRecording = false;
+            status.stop();
+        }
 
         async function onError(retry = 0) {
             const maxRetires = 3;
@@ -135,7 +197,7 @@ export function activate(context: vscode.ExtensionContext) {
             }
 
             if (!store.isRecording) {
-                await gdRecord();
+                return vscode.window.showErrorMessage('Please start a coding session from https://gitduck.com');
             }
 
             const editor = vscode.window.activeTextEditor;

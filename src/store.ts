@@ -40,6 +40,8 @@ class Store {
         ORGANIZATIONS_CHANGED: 'ORGANIZATIONS_CHANGED',
         USER_LOGGED_IN: 'USER_LOGGED_IN',
         USER_LOGGED_OUT: 'USER_LOGGED_OUT',
+        CODING_SESSION_STARTED: 'CODING_SESSION_STARTED',
+        CODING_SESSION_ENDED: 'CODING_SESSION_ENDED',
     };
 
     constructor(private context: vscode.ExtensionContext) {
@@ -72,6 +74,22 @@ class Store {
 
     onUserLoggedOut(callback) {
         this.eventEmitter.on(this.events.USER_LOGGED_OUT, callback)
+    }
+
+    emitStartedCodingSession(codingSessionId, createdDateTime) {
+        this.eventEmitter.emit(this.events.CODING_SESSION_STARTED, codingSessionId, createdDateTime)
+    }
+
+    emitEndedCodingSession(codingSessionId) {
+        this.eventEmitter.emit(this.events.CODING_SESSION_ENDED, codingSessionId)
+    }
+
+    onCodingSessionStarted(callback) {
+        this.eventEmitter.on(this.events.CODING_SESSION_STARTED, callback)
+    }
+
+    onCodingSessionEnded(callback) {
+        this.eventEmitter.on(this.events.CODING_SESSION_ENDED, callback)
     }
 
     setAuthToken(token: string) {
