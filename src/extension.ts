@@ -8,6 +8,7 @@ import {initCodeLinkingListener, getSessionCommits, cleanupCodeLinkingSession} f
 import {ExtensionUriHandler} from './uri-handler';
 import {login, logout} from './auth';
 import {initTreeView} from './tree-view';
+import {init as initWebSocket} from './websocket';
 
 export function activate(context: vscode.ExtensionContext) {
     try {
@@ -21,6 +22,7 @@ export function activate(context: vscode.ExtensionContext) {
         }
         status.show();
         initTreeView(recorder);
+        initWebSocket();
 
         async function onError(retry = 0) {
             const maxRetires = 3;

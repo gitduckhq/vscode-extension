@@ -155,7 +155,8 @@
 		"request-promise-native": "^1.0.7",
 		"simple-git": "^1.126.0",
 		"systeminformation": "^4.14.16",
-		"tempy": "^0.3.0"
+		"tempy": "^0.3.0",
+		"ws": "^7.2.1"
 	},
 	"repository": {
 		"private": false,

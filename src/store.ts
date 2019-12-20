@@ -37,7 +37,9 @@ class Store {
     public viewURL: string | undefined;
     public startTrackingTimestamp: Date;
     public events = {
-        ORGANIZATIONS_CHANGED: 'ORGANIZATIONS_CHANGED'
+        ORGANIZATIONS_CHANGED: 'ORGANIZATIONS_CHANGED',
+        USER_LOGGED_IN: 'USER_LOGGED_IN',
+        USER_LOGGED_OUT: 'USER_LOGGED_OUT',
     };
 
     constructor(private context: vscode.ExtensionContext) {
@@ -64,10 +66,19 @@ class Store {
         this.eventEmitter.on(this.events.ORGANIZATIONS_CHANGED, callback)
     }
 
+    onUserLoggedIn(callback) {
+        this.eventEmitter.on(this.events.USER_LOGGED_IN, callback)
+    }
+
+    onUserLoggedOut(callback) {
+        this.eventEmitter.on(this.events.USER_LOGGED_OUT, callback)
+    }
+
     setAuthToken(token: string) {
         const {globalState} = this.context;
         globalState.update(stateKeys.AUTH_TOKEN, token);
         this.authToken = token;
+        this.eventEmitter.emit(this.events.USER_LOGGED_IN);
     }
 
     getMyOrganizations() {
@@ -103,6 +114,7 @@ class Store {
         this.clearAuthToken();
         this.setMyOrganizations(null);
         this.setSelectedOrganizationId(null);
+        this.eventEmitter.emit(this.events.USER_LOGGED_OUT);
     }
 
     clearAuthToken() {
