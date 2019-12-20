@@ -1,6 +1,6 @@
 {
 	"name": "code-streaming",
-	"displayName": "GitDuck - Live coding for remote teams",
+	"displayName": "GitDuck - Screencast Video Recording",
 	"description": "Remote Pair Programming and Rubber Duck Debugging tool.",
 	"publisher": "gitduck",
 	"version": "0.0.33",
@@ -16,11 +16,13 @@
 		"email": "help@gitduck.com"
 	},
 	"keywords": [
-		"code review",
+		"remote teams",
 		"video recording",
 		"live coding",
 		"youtube",
-		"twitch"
+		"twitch",
+		"record video",
+		"loom"
 	],
 	"license": "GPL-3.0",
 	"icon": "out/assets/gitduck-extension-icon.png",
