@@ -55,7 +55,6 @@ class StatusBar {
     stop() {
         workbenchConfig.update('colorCustomizations', this.userColorCustomizations, true);
         this.recordingStopped();
-        this.item.command = 'gitduck.record';
         this.item.text = '$(triangle-right) Start GitDuck';
         this.item.color = 'white';
         this.counting = false;
@@ -86,7 +85,6 @@ class StatusBar {
         this.userColorCustomizations = workbenchConfig.get('colorCustomizations');
         const colorCustomizations = {...this.userColorCustomizations, ...this.gitDuckColorCustomizations};
         workbenchConfig.update('colorCustomizations', colorCustomizations, true);
-        this.item.command = 'gitduck.stop';
         this.item.text = '$(primitive-square) GitDuck stream';
         this.item.color = '#000000';
 
@@ -108,31 +106,6 @@ class StatusBar {
         this.timeout = setInterval(update, 1000);
 
         update();
-    }
-
-    async countDown(seconds?: number) {
-        if (seconds === undefined) {
-            seconds = 3;
-        }
-
-        this.item.command = 'gitduck.stop';
-
-        this.counting = true;
-
-        const colors = ['#ffff00', '#ffff33', '#ffff66', '#ffff99', '#ffffcc'];
-
-        for (let i = seconds; i > 0; i--) {
-            this.item.color = colors[i];
-            this.item.text = `$(pulse) Starting in ${i} seconds`;
-            await new Promise(r => setTimeout(r, 1000));
-            if (!this.counting) {
-                throw new Error('Countdown canceled');
-            }
-        }
-
-        this.counting = false;
-        this.item.text = '$(pulse) GitDuck Starting ...';
-        this.item.color = colors[0];
     }
 }
 

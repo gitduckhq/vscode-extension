@@ -31,14 +31,6 @@
 	"contributes": {
 		"commands": [
 			{
-				"command": "gitduck.record",
-				"title": "GitDuck: Start Recording"
-			},
-			{
-				"command": "gitduck.stop",
-				"title": "GitDuck: Stop Recording"
-			},
-			{
 				"command": "gitduck.login",
 				"title": "GitDuck: Login"
 			},
@@ -49,74 +41,9 @@
 			{
 				"command": "gitduck.uploadSnippet",
 				"title": "GitDuck: Upload snippet"
-			},
-			{
-				"command": "gitduck.refreshInputDevices",
-				"title": "Refresh devices",
-				"icon": {
-					"light": "assets/refresh-light.svg",
-					"dark": "assets/refresh-dark.svg"
-				}
-			},
-			{
-				"command": "gitduck.refreshOrganizations",
-				"title": "Refresh organizations",
-				"icon": {
-					"light": "assets/refresh-light.svg",
-					"dark": "assets/refresh-dark.svg"
-				}
 			}
 		],
-		"configuration": {
-			"type": "object",
-			"title": "GitDuck configuration",
-			"properties": {
-				"gitduck.video-quality": {
-					"title": "Video Quality",
-					"type": "string",
-					"enum": [
-						"low",
-						"high"
-					],
-					"default": "low",
-					"description": "GitDuck video quality. Adjust depending on your network/performance."
-				}
-			}
-		},
-		"viewsContainers": {
-			"activitybar": [
-				{
-					"id": "gitduck",
-					"title": "GitDuck",
-					"icon": "assets/gitduck-extension-tree-icon.svg"
-				}
-			]
-		},
-		"views": {
-			"gitduck": [
-				{
-					"id": "inputSettings",
-					"name": "Select screen and mic"
-				},
-				{
-					"id": "teamSelector",
-					"name": "Select team"
-				}
-			]
-		},
 		"menus": {
-			"view/title": [
-				{
-					"command": "gitduck.refreshInputDevices",
-					"when": "view == inputSettings",
-					"group": "navigation"
-				},
-				{
-					"command": "gitduck.refreshOrganizations",
-					"when": "view == teamSelector",
-					"group": "navigation"
-				}
-			],
 			"editor/context": [
 				{
 					"command": "gitduck.uploadSnippet",
