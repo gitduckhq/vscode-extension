@@ -56,7 +56,7 @@ class StatusBar {
         workbenchConfig.update('colorCustomizations', this.userColorCustomizations, true);
         this.item.command = 'gitduck.newStream';
         this.recordingStopped();
-        this.item.text = '$(triangle-right) Start GitDuck';
+        this.item.text = '$(circle-outline) Record new video';
         this.item.color = 'white';
         this.counting = false;
     }
@@ -87,7 +87,7 @@ class StatusBar {
         const colorCustomizations = {...this.userColorCustomizations, ...this.gitDuckColorCustomizations};
         workbenchConfig.update('colorCustomizations', colorCustomizations, true);
         this.item.command = 'gitduck.stopStream';
-        this.item.text = '$(primitive-square) GitDuck stream';
+        this.item.text = '$(circle-filled) GitDuck recording';
         this.item.color = '#000000';
 
         const start = Date.now();
