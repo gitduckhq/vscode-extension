@@ -41,6 +41,10 @@
 			{
 				"command": "gitduck.uploadSnippet",
 				"title": "GitDuck: Upload snippet"
+			},
+			{
+				"command": "gitduck.newStream",
+				"title": "GitDuck: Start stream"
 			}
 		],
 		"menus": {

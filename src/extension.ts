@@ -120,6 +120,15 @@ export function activate(context: vscode.ExtensionContext) {
             store.addSnippet(snippet);
         }
 
+        function newStream() {
+            vscode.env.openExternal(vscode.Uri.parse(`${config.websiteHost}/new-video`))
+        }
+
+        function stopStream() {
+            const {viewURL} = getStore();
+            vscode.window.showInformationMessage(`You can stop this video from your browser.`)
+        }
+
         const registerCommand = (id: string, cb: (...args: any) => any) => context.subscriptions.push(
             vscode.commands.registerCommand(id, cb)
         );
@@ -127,6 +136,8 @@ export function activate(context: vscode.ExtensionContext) {
         registerCommand('gitduck.login', login);
         registerCommand('gitduck.logout', logout);
         registerCommand('gitduck.uploadSnippet', uploadSnippet);
+        registerCommand('gitduck.newStream', newStream);
+        registerCommand('gitduck.stopStream', stopStream);
 
         context.subscriptions.push(status, vscode.window.registerUriHandler(new ExtensionUriHandler()));
     } catch (e) {

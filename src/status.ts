@@ -54,6 +54,7 @@ class StatusBar {
 
     stop() {
         workbenchConfig.update('colorCustomizations', this.userColorCustomizations, true);
+        this.item.command = 'gitduck.newStream';
         this.recordingStopped();
         this.item.text = '$(triangle-right) Start GitDuck';
         this.item.color = 'white';
@@ -85,6 +86,7 @@ class StatusBar {
         this.userColorCustomizations = workbenchConfig.get('colorCustomizations');
         const colorCustomizations = {...this.userColorCustomizations, ...this.gitDuckColorCustomizations};
         workbenchConfig.update('colorCustomizations', colorCustomizations, true);
+        this.item.command = 'gitduck.stopStream';
         this.item.text = '$(primitive-square) GitDuck stream';
         this.item.color = '#000000';
 
