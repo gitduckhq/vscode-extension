@@ -5,6 +5,7 @@ import {getStore} from './store'
 
 /*
 TODO: Handle reconnection
+TODO: Handle health-check
 */
 
 let wsConnection;
