@@ -22,7 +22,9 @@
 		"youtube",
 		"twitch",
 		"record video",
-		"loom"
+		"loom",
+		"git duck"
+
 	],
 	"license": "GPL-3.0",
 	"icon": "out/assets/gitduck-extension-icon.png",
