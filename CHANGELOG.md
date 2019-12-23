@@ -1,5 +1,9 @@
 # GitDuck Change Log
 
+## [Version 0.0.35]
+
+- Fix WebSocket reliability issues.
+
 ## [Version 0.0.34]
 
 - Remove recording with FFmpeg.
