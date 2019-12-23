@@ -2,11 +2,6 @@ import * as WebSocket from 'ws'
 import config from './config'
 import {getStore} from './store'
 
-
-/*
-TODO: Handle reconnection
-*/
-
 let wsConnection;
 
 enum WsReadyStatus {
@@ -34,6 +29,8 @@ async function onUserLoggedIn() {
 
     await send({type: 'subscribe_created_or_stopped_sessions'});
     const ws = await getConnection();
+
+    ws.on('close', () => setTimeout(init, 1000));
 
     ws.on('message', msg => {
         const {type, codingSessionId, createdDateTime} = JSON.parse(msg);
@@ -67,29 +64,37 @@ export async function disconnect() {
 }
 
 export async function getConnection() {
-    // TODO: Check if host is down or can't open connection
+    try {
+        // if no wsConnection or wsConnection is CLOSING or CLOSED create new Connection
+        if (!wsConnection || [WsReadyStatus.CLOSING, WsReadyStatus.CLOSED].includes(wsConnection.readyState)) {
+            wsConnection = new WebSocket(config.apiHost.replace('http', 'ws') + '/websocket');
+            return await new Promise((resolve, reject) => {
+                wsConnection.on('open', function onOpen() {
+                    wsConnection.off('open', onOpen);
+                    resolve(wsConnection);
+                });
+                wsConnection.on('error', function onError(error) {
+                    wsConnection.off('error', onError);
+                    reject(error)
+                })
+            })
+        }
 
-    // if no wsConnection or wsConnection is CLOSING or CLOSED create new Connection
-    if (!wsConnection || [WsReadyStatus.CLOSING, WsReadyStatus.CLOSED].includes(wsConnection.readyState)) {
-        wsConnection = new WebSocket(config.apiHost.replace('http', 'ws') + '/websocket');
-        return new Promise(resolve => {
-            wsConnection.on('open', function onOpen() {
-                wsConnection.off('open', onOpen);
-                resolve(wsConnection);
-            });
-        })
+        if (wsConnection.readyState === WsReadyStatus.CONNECTING) {
+            return new Promise(resolve => {
+                wsConnection.on('open', function onOpen() {
+                    wsConnection.off('open', onOpen);
+                    resolve(wsConnection);
+                });
+            })
+        }
+
+        return wsConnection;
+    } catch (error) {
+        await new Promise(resolve => setTimeout(resolve, 0));
+        console.error('Error getting connection, retrying', error);
+        return getConnection();
     }
-
-    if (wsConnection.readyState === WsReadyStatus.CONNECTING) {
-        return new Promise(resolve => {
-            wsConnection.on('open', function onOpen() {
-                wsConnection.off('open', onOpen);
-                resolve(wsConnection);
-            });
-        })
-    }
-
-    return wsConnection;
 }
 
 export async function authenticate(token) {
@@ -103,7 +108,7 @@ export async function authenticate(token) {
                 return resolve()
             } else if (type === 'error') {
                 ws.off('message', onMsg);
-                return reject()
+                return reject('Error authenticating over web sockets')
             }
         })
     })

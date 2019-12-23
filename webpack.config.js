@@ -8,16 +8,6 @@ const {promisify} = require('util')
 const webpack = require('webpack')
 const exec = promisify(childProcess.exec)
 
-class AddExecutionParamsToBinariesPlugin {
-  apply (compiler) {
-    compiler.hooks.done.tap('Adding execution permissions to ./out/bin binaries', (
-      stats /* stats is passed as argument when done hook is tapped.  */
-    ) => {
-      exec('chmod -R +x ' + path.resolve(__dirname, 'out/bin'))
-    })
-  }
-}
-
 module.exports = async (env, options) => {
   const isProd = options.mode === 'production'
 
@@ -39,7 +29,6 @@ module.exports = async (env, options) => {
     },
     node: {
       __dirname: false,
-      'osx-temperature-sensor': false,
     },
     resolve: {
       // support reading TypeScript and JavaScript files, 📖 -> https://github.com/TypeStrong/ts-loader
@@ -48,12 +37,10 @@ module.exports = async (env, options) => {
     plugins: [
       new CopyWebpackPlugin([
         {from: 'assets', to: 'assets'},
-        {from: 'src/recorder/bin', to: 'bin'},
       ]),
       new webpack.EnvironmentPlugin({
         'process.env.NODE_ENV': isProd ? 'production' : 'development',
       }),
-      new AddExecutionParamsToBinariesPlugin(),
     ],
     module: {
       rules: [

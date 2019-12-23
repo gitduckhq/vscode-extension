@@ -1,5 +1,14 @@
 # GitDuck Change Log
 
+## [Version 0.0.35]
+
+- Fix WebSocket reliability issues.
+
+## [Version 0.0.34]
+
+- Remove recording with FFmpeg.
+- Extension only does code-linking, recording is from browser.
+
 ## [Version 0.0.33]
 
 - Improve FFmpeg process termination. ([5d36cf0](https://github.com/gitduckhq/vscode-extension/commit/5d36cf0a03fca5030c8a1469d910aff6490e4e00))
