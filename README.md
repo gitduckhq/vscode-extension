@@ -1,6 +1,6 @@
 # GitDuck
 
-GitDuck is an open source collaboration tool for developers. It allows developers to record their screen and link their code to the video time timestamps and create interactive coding videos.
+GitDuck is an open source collaboration tool for developers. It allows developers to record their screen and link their code to the video timestamps and create interactive coding videos.
 
 This extension will automatically link your code whenever you are recording a video with GitDuck.
 
