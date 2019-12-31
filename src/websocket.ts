@@ -91,7 +91,7 @@ export async function getConnection() {
 
         return wsConnection;
     } catch (error) {
-        await new Promise(resolve => setTimeout(resolve, 0));
+        await new Promise(resolve => setTimeout(resolve, 1000 + (1000 * Math.random())));
         console.error('Error getting connection, retrying', error);
         return getConnection();
     }
