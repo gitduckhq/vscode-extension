@@ -82,7 +82,7 @@ class StatusBar {
         }
     }
 
-    start() {
+    start(createdDateTime) {
         this.userColorCustomizations = workbenchConfig.get('colorCustomizations');
         const colorCustomizations = {...this.userColorCustomizations, ...this.gitDuckColorCustomizations};
         workbenchConfig.update('colorCustomizations', colorCustomizations, true);
@@ -90,7 +90,7 @@ class StatusBar {
         this.item.text = '$(circle-filled) GitDuck recording';
         this.item.color = '#000000';
 
-        const start = Date.now();
+        const start = createdDateTime || Date.now();
         const og = this.item.text;
         const sec = 1000;
         const min = sec * 60;

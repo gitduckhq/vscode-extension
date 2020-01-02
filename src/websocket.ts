@@ -36,7 +36,7 @@ async function onUserLoggedIn() {
         const {type, codingSessionId, createdDateTime} = JSON.parse(msg);
 
         if (type === 'coding_session_created') {
-            getStore().emitStartedCodingSession(codingSessionId, createdDateTime)
+            getStore().emitStartedCodingSession(codingSessionId, createdDateTime && new Date(createdDateTime))
         } else if (type === 'coding_session_ended') {
             getStore().emitEndedCodingSession(codingSessionId)
         }

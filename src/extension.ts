@@ -39,7 +39,7 @@ export function activate(context: vscode.ExtensionContext) {
                     vscode.env.clipboard.writeText(store.viewURL);
                 });
 
-                status.start();
+                status.start(createdDateTime);
             } catch (error) {
                 vscode.window.showErrorMessage('Something went wrong. If you need help please write to help@gitduck.com.');
                 console.error(error);
