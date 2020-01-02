@@ -3,12 +3,29 @@ import config from './config'
 import {getStore} from './store'
 
 let wsConnection;
+let pingTimeout;
+
+const heartbeat = () => {
+    clearTimeout(pingTimeout);
+
+    const timeLimit = (30 + 1) * 1000;
+    pingTimeout = setTimeout(() => {
+        return wsConnection && wsConnection.terminate()
+    }, timeLimit)
+};
 
 enum WsReadyStatus {
     CONNECTING = 0,
     OPEN = 1,
     CLOSING = 2,
     CLOSED = 3,
+}
+
+function connectIfLoggedIn() {
+    const store = getStore();
+    if (store.isAuthenticated()) {
+        onUserLoggedIn().catch(console.error);
+    }
 }
 
 
@@ -18,9 +35,7 @@ export function init() {
     store.onUserLoggedIn(onUserLoggedIn);
     store.onUserLoggedOut(onUserLoggedOut);
 
-    if (store.isAuthenticated()) {
-        onUserLoggedIn().catch(console.error);
-    }
+    connectIfLoggedIn()
 }
 
 async function onUserLoggedIn() {
@@ -30,7 +45,7 @@ async function onUserLoggedIn() {
     await send({type: 'subscribe_created_or_stopped_sessions'});
     const ws = await getConnection();
 
-    ws.on('close', () => setTimeout(init, 1000));
+    ws.on('close', () => setTimeout(connectIfLoggedIn, 1000));
 
     ws.on('message', msg => {
         const {type, codingSessionId, createdDateTime} = JSON.parse(msg);
@@ -68,6 +83,11 @@ export async function getConnection() {
         // if no wsConnection or wsConnection is CLOSING or CLOSED create new Connection
         if (!wsConnection || [WsReadyStatus.CLOSING, WsReadyStatus.CLOSED].includes(wsConnection.readyState)) {
             wsConnection = new WebSocket(config.apiHost.replace('http', 'ws') + '/websocket');
+
+            wsConnection.on('open', heartbeat);
+            wsConnection.on('ping', heartbeat);
+            wsConnection.on('close', () => clearTimeout(pingTimeout));
+
             return await new Promise((resolve, reject) => {
                 wsConnection.on('open', function onOpen() {
                     wsConnection.off('open', onOpen);
