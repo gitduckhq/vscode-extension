@@ -6,10 +6,12 @@ let wsConnection;
 let pingTimeout;
 
 const heartbeat = () => {
+    console.debug('WS heartbeat');
     clearTimeout(pingTimeout);
 
     const timeLimit = (30 + 1) * 1000;
     pingTimeout = setTimeout(() => {
+        console.debug('Terminating WS connection because failed the heartbeat');
         return wsConnection && wsConnection.terminate()
     }, timeLimit)
 };
@@ -30,6 +32,7 @@ function connectIfLoggedIn() {
 
 
 export function init() {
+    console.debug('Initiating WS library');
     const store = getStore();
 
     store.onUserLoggedIn(onUserLoggedIn);
@@ -40,7 +43,9 @@ export function init() {
 
 async function onUserLoggedIn() {
     const authToken = getStore().getAuthToken();
+    console.debug('Authenticating WS server');
     await authenticate(authToken);
+    console.debug('WS server authentication ok');
 
     await send({type: 'subscribe_created_or_stopped_sessions'});
     const ws = await getConnection();
@@ -48,6 +53,7 @@ async function onUserLoggedIn() {
     ws.on('close', () => setTimeout(connectIfLoggedIn, 1000));
 
     ws.on('message', msg => {
+        console.debug('WS message received', msg);
         const {type, codingSessionId, createdDateTime} = JSON.parse(msg);
 
         if (type === 'coding_session_created') {
@@ -64,6 +70,7 @@ async function onUserLoggedOut() {
 
 
 export async function send(msg) {
+    console.debug('Sending WS msg', JSON.stringify(msg));
     const ws = await getConnection();
     ws.send(JSON.stringify(msg))
 }
