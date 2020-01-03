@@ -1,5 +1,11 @@
 # GitDuck Change Log
 
+## [Version 0.0.36]
+
+- Fix WebSocket reliability issues and performance.
+- Added health checks for WebSockets.
+- Minor fixes.
+
 ## [Version 0.0.35]
 
 - Fix WebSocket reliability issues.
