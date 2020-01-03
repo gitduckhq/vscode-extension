@@ -62,7 +62,7 @@
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run webpack-prod",
-		"compile": "webpack --mode -development",
+		"compile": "webpack --mode development",
 		"watch": "webpack --mode development --watch",
 		"postinstall": "node ./node_modules/vscode/bin/install",
 		"test": "npm run compile && node ./node_modules/vscode/bin/test",
