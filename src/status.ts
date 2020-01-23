@@ -105,6 +105,7 @@ class StatusBar {
             this.item.text = `${og} : ${timeStr}`;
         };
 
+        clearTimeout(this.timeout);
         this.timeout = setInterval(update, 1000);
 
         update();
