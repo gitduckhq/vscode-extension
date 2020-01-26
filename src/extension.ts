@@ -3,7 +3,7 @@ import status from './status';
 import {addCommits} from './api';
 import config from './config';
 import {getStore, initStore} from './store';
-import {initCodeLinkingListener, getSessionCommits, cleanupCodeLinkingSession} from './code-linking';
+import {cleanupCodeLinkingSession, getSessionCommits, initCodeLinkingListener} from './code-linking';
 import {ExtensionUriHandler} from './uri-handler';
 import {login, logout} from './auth';
 import {init as initWebSocket} from './websocket';
@@ -24,6 +24,10 @@ export function activate(context: vscode.ExtensionContext) {
         initWebSocket();
 
         async function onCodingSessionStart(codingSessionId, createdDateTime) {
+            if (store.isRecording) {
+                return
+            }
+
             store.isRecording = true;
             status.loading();
             try {
