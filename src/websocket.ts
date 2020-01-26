@@ -12,7 +12,7 @@ const heartbeat = () => {
     const timeLimit = (30 + 1) * 1000;
     pingTimeout = setTimeout(() => {
         console.debug('Terminating WS connection because failed the heartbeat');
-        return wsConnection && wsConnection.terminate()
+        return disconnect()
     }, timeLimit)
 };
 
@@ -50,10 +50,14 @@ async function onUserLoggedIn() {
     await send({type: 'subscribe_created_or_stopped_sessions'});
     const ws = await getConnection();
 
-    ws.on('close', () => setTimeout(connectIfLoggedIn, 1000));
+    ws.on('close', async () => {
+        if (wsConnection && wsConnection.off) {
+            wsConnection.off()
+        }
+        setTimeout(connectIfLoggedIn, 1000)
+    });
 
     ws.on('message', msg => {
-        console.debug('WS message received', msg);
         const {type, codingSessionId, createdDateTime} = JSON.parse(msg);
 
         if (type === 'coding_session_created') {
@@ -77,10 +81,12 @@ export async function send(msg) {
 
 export async function disconnect() {
     if (wsConnection && wsConnection.readyStatus === WsReadyStatus.CLOSED) {
+        wsConnection.off();
         wsConnection = null;
         return;
     }
 
+    wsConnection.off();
     wsConnection.terminate();
     wsConnection = null;
 }
