@@ -25,7 +25,7 @@ class Store {
     private snippets: object[] = [];
     private eventEmitter: EventEmitter;
 
-    public codingSession = null;
+    public codingSessionId = null;
     public isRecording = false;
     public viewURL: string | undefined;
     public startTrackingTimestamp: Date;
@@ -39,6 +39,10 @@ class Store {
     constructor(private context: vscode.ExtensionContext) {
         this.loadInitialState();
         this.eventEmitter = new EventEmitter();
+        this.eventEmitter.on(this.events.CODING_SESSION_STARTED, (codingSessionId) => {
+            this.codingSessionId = codingSessionId
+        });
+        this.eventEmitter.on(this.events.CODING_SESSION_ENDED, () => this.codingSessionId = null);
     }
 
     loadInitialState() {
@@ -113,7 +117,7 @@ class Store {
     }
 
     cleanupCodingSession() {
-        this.codingSession = null;
+        this.codingSessionId = null;
         this.isRecording = false;
         this.viewURL = undefined;
         this.startTrackingTimestamp = undefined;
