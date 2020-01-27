@@ -3,7 +3,7 @@ import status from './status';
 import {addCommits} from './api';
 import config from './config';
 import {getStore, initStore} from './store';
-import {cleanupCodeLinkingSession, getSessionCommits, initCodeLinkingListener} from './code-linking';
+import {cleanupCodeLinkingSession, initCodeLinkingListener} from './code-linking';
 import {ExtensionUriHandler} from './uri-handler';
 import {login, logout} from './auth';
 import {init as initWebSocket} from './websocket';
@@ -31,8 +31,9 @@ export function activate(context: vscode.ExtensionContext) {
             store.isRecording = true;
             status.loading();
             try {
-                // store.setRecordingCodingSession(newCodingSession);
-                await initCodeLinkingListener();
+                await initCodeLinkingListener({
+                    onCommitDetected: createOnCommitDetectedFn(codingSessionId)
+                });
                 store.startTrackingTimestamp = createdDateTime ? new Date(createdDateTime) : new Date();
 
                 store.viewURL = `${config.websiteHost}/watch/${codingSessionId}`;
@@ -52,37 +53,38 @@ export function activate(context: vscode.ExtensionContext) {
             }
         }
 
-        async function onCodingSessionEnd(codingSessionId) {
-            try {
-                status.uploading();
-
-                const commits = getSessionCommits();
-                console.log('commmits', commits);
-                const snippets = store.getSnippets();
-                console.log('snippets', snippets);
-                if (commits.length > 0 || snippets.length > 0) {
-                    await addCommits({id: codingSessionId, commits, snippets})
-                        .catch(error => {
-                            console.error(error);
-                            vscode.window.showErrorMessage('Error uploading your commits');
-                        })
+        function createOnCommitDetectedFn(codingSessionId) {
+            return async (commit) => {
+                try {
+                    await addCommits({
+                        id: codingSessionId,
+                        commits: [commit]
+                    });
+                } catch (error) {
+                    console.error('Error uploading commit', error);
+                    await new Promise(resolve => setTimeout(resolve, 3000));
+                    await addCommits({
+                        id: codingSessionId,
+                        commits: [commit]
+                    }).catch(() => vscode.window.showErrorMessage('Error uploading commit'));
                 }
-
-                const {viewURL} = store;
-
-                cleanupCodeLinkingSession();
-                store.cleanupCodingSession();
-
-                vscode.window.showInformationMessage(
-                    `Uploading commits to ${viewURL}`,
-                    'Copy URL'
-                ).then(() => {
-                    vscode.env.clipboard.writeText(viewURL);
-                });
-            } catch (error) {
-                vscode.window.showErrorMessage('Something went wrong while uploading your code. You can contact us at help@gitduck.com');
-                console.error(error);
             }
+        }
+
+        async function onCodingSessionEnd(codingSessionId) {
+            status.uploading();
+
+            const {viewURL} = store;
+
+            cleanupCodeLinkingSession();
+            store.cleanupCodingSession();
+
+            vscode.window.showInformationMessage(
+                `Share your coding video: ${viewURL}`,
+                'Copy URL'
+            ).then(() => {
+                vscode.env.clipboard.writeText(viewURL);
+            });
             store.isRecording = false;
             status.stop();
         }
@@ -121,7 +123,12 @@ export function activate(context: vscode.ExtensionContext) {
                 videoTimestamp: Math.floor((Number(now) - store.startTrackingTimestamp.getTime()) / 1000),
             };
 
-            store.addSnippet(snippet);
+            try {
+                await addCommits({id: store.codingSessionId, snippets: [snippet]});
+            } catch (error) {
+                console.error('Error uploading snippet', error);
+                vscode.window.showErrorMessage('Error uploading your snippet')
+            }
         }
 
         function newStream() {

@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import {FileSystemWatcher, FileType, Uri, workspace} from 'vscode';
+import {FileSystemWatcher, FileType, Uri, workspace} from "vscode";
 import * as fs from 'fs';
 import * as nodePath from 'path';
 import * as nodeUtil from 'util';
@@ -82,7 +82,7 @@ async function getCommitsDuringSession(gitRepo: string) {
     });
 }
 
-async function watchGitCommits() {
+async function watchGitCommits({onCommitDetected}: {onCommitDetected?: Function} = {}) {
     console.log('Discovering and watching .git folders');
     const {workspaceFolders} = vscode.workspace;
 
@@ -136,6 +136,8 @@ async function watchGitCommits() {
                                 rawCommit: await rawCommit,
                                 rawCommitFull: await rawCommitFull,
                             };
+
+                            onCommitDetected(commitsInSession[commit.hash])
                         }
                     }).map(p => p.catch(console.error))
                 );
@@ -161,12 +163,12 @@ function cleanWatchers() {
     });
 }
 
-async function initCodeLinkingListener() {
+async function initCodeLinkingListener({onCommitDetected}: {onCommitDetected?: Function} = {}) {
     gitFileListeners = {};
     commitsInSession = {};
 
-    watchGitCommits().catch(console.error);
-    onDidChangeWorkspaceFoldersEmitters = vscode.workspace.onDidChangeWorkspaceFolders(watchGitCommits);
+    watchGitCommits({onCommitDetected}).catch(console.error);
+    onDidChangeWorkspaceFoldersEmitters = vscode.workspace.onDidChangeWorkspaceFolders(() => watchGitCommits({onCommitDetected}));
 }
 
 function getSessionCommits(): Array<Commit> {

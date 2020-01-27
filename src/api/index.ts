@@ -45,7 +45,7 @@ async function post({path, body, getFullResponse = false}: { path: string, body?
     });
 }
 
-async function addCommits({id, commits = [], snippets = []}: { id: string, commits: Commit[], snippets: object[] }) {
+async function addCommits({id, commits = [], snippets = []}: { id: string, commits?: Commit[], snippets?: object[] }) {
     return post({
         path: `/coding-sessions/${id}/commits`,
         body: {
