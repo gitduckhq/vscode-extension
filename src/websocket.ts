@@ -52,7 +52,7 @@ async function onUserLoggedIn() {
 
     ws.on('close', async () => {
         if (wsConnection && wsConnection.off) {
-            wsConnection.off()
+            wsConnection.removeAllListeners()
         }
         setTimeout(connectIfLoggedIn, 1000)
     });
@@ -81,12 +81,12 @@ export async function send(msg) {
 
 export async function disconnect() {
     if (wsConnection && wsConnection.readyStatus === WsReadyStatus.CLOSED) {
-        wsConnection.off();
+        wsConnection.removeAllListeners();
         wsConnection = null;
         return;
     }
 
-    wsConnection.off();
+    wsConnection.removeAllListeners();
     wsConnection.terminate();
     wsConnection = null;
 }
