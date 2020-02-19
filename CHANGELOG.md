@@ -1,5 +1,9 @@
 # GitDuck Change Log
 
+## [Version 0.0.38]
+
+- Fix: reconnect websocket when connection was lost
+
 ## [Version 0.0.37]
 
 - Fix WebSocket reliability issues.

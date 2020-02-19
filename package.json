@@ -3,7 +3,7 @@
 	"displayName": "GitDuck - Screencast Video Recording",
 	"description": "Remote Pair Programming and Rubber Duck Debugging tool.",
 	"publisher": "gitduck",
-	"version": "0.0.37",
+	"version": "0.0.38",
 	"engines": {
 		"vscode": "^1.33.0"
 	},
