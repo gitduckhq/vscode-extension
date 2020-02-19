@@ -50,13 +50,6 @@ async function onUserLoggedIn() {
     await send({type: 'subscribe_created_or_stopped_sessions'});
     const ws = await getConnection();
 
-    ws.on('close', async () => {
-        if (wsConnection && wsConnection.off) {
-            wsConnection.removeAllListeners()
-        }
-        setTimeout(connectIfLoggedIn, 1000)
-    });
-
     ws.on('message', msg => {
         const {type, codingSessionId, createdDateTime} = JSON.parse(msg);
 
@@ -86,9 +79,11 @@ export async function disconnect() {
         return;
     }
 
-    wsConnection.removeAllListeners();
     wsConnection.terminate();
+    wsConnection.removeAllListeners();
     wsConnection = null;
+    clearTimeout(pingTimeout);
+    setTimeout(connectIfLoggedIn, 1000)
 }
 
 export async function getConnection() {
@@ -99,7 +94,6 @@ export async function getConnection() {
 
             wsConnection.on('open', heartbeat);
             wsConnection.on('ping', heartbeat);
-            wsConnection.on('close', () => clearTimeout(pingTimeout));
 
             return await new Promise((resolve, reject) => {
                 wsConnection.on('open', function onOpen() {
