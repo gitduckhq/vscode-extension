@@ -83,7 +83,7 @@
 	},
 	"dependencies": {
 		"@types/request-promise-native": "^1.0.17",
-		"lodash": "^4.17.15",
+		"lodash": "^4.17.19",
 		"parse-diff": "^0.6.0",
 		"request": "^2.88.0",
 		"request-promise-native": "^1.0.7",
