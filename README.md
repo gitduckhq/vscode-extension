@@ -1,4 +1,6 @@
-# GitDuck
+# THIS REPOSITORY IS ARCHIVED AND OUTDATED. PLEASE CHECK THE LATEST VSCODE EXTENSION IN [VSCODE MARKETPLACE](https://marketplace.visualstudio.com/items?itemName=gitduck.code-streaming) OR [OPEN-VSX MARKETPLACE](https://open-vsx.org/extension/gitduck/code-streaming)
+
+## GitDuck
 
 GitDuck is an open source collaboration tool for developers. It allows developers to record their screen and link their code to the video timestamps and create interactive coding videos.
 
